@@ -1,0 +1,97 @@
+name: Build Linux Packages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev dpkg fakeroot
+          
+      - run: flutter pub get
+      
+      - run: flutter build linux --release
+      
+      - name: Create AppImage
+        run: |
+          mkdir -p appimage/usr/bin
+          mkdir -p appimage/usr/lib
+          cp -r build/linux/x64/release/bundle/* appimage/usr/lib/life_plans/
+          cp build/linux/x64/release/bundle/life_plans appimage/usr/bin/
+          
+          cat > appimage/AppRun << 'EOF'
+          #!/bin/bash
+          HERE="$(dirname "$(readlink -f "${0}")")"
+          export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH}"
+          exec "${HERE}/usr/bin/life_plans" "$@"
+          EOF
+          chmod +x appimage/AppRun
+          
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+          
+          cat > appimage/life_plans.desktop << 'EOF'
+          [Desktop Entry]
+          Name=Life Plans
+          Comment=A free and open source task scheduler app
+          Exec=life_plans
+          Icon=life_plans
+          Terminal=false
+          Type=Application
+          Categories=Utility;Office;
+          EOF
+          
+          cp appimage/life_plans.desktop appimage/.desktop
+          ./appimagetool appimage LifePlans.AppImage
+          
+      - name: Create .deb package
+        run: |
+          mkdir -p deb/DEBIAN
+          mkdir -p deb/usr/bin
+          mkdir -p deb/usr/lib/life_plans
+          mkdir -p deb/usr/share/applications
+          
+          cp -r build/linux/x64/release/bundle/* deb/usr/lib/life_plans/
+          cp build/linux/x64/release/bundle/life_plans deb/usr/bin/
+          
+          cat > deb/DEBIAN/control << 'EOF'
+          Package: life-plans
+          Version: 1.0.0
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Depends: libc6 (>= 2.28), libgtk-3-0 (>= 3.22.29)
+          Maintainer: Life Plans Team
+          Description: A free and open source task scheduler app
+          EOF
+          
+          cat > deb/usr/share/applications/life_plans.desktop << 'EOF'
+          [Desktop Entry]
+          Name=Life Plans
+          Comment=A free and open source task scheduler app
+          Exec=/usr/bin/life_plans
+          Icon=life_plans
+          Terminal=false
+          Type=Application
+          Categories=Utility;Office;
+          EOF
+          
+          dpkg-deb --build deb life_plans_1.0.0_amd64.deb
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: |
+            LifePlans.AppImage
+            life_plans_1.0.0_amd64.deb
