@@ -86,7 +86,7 @@ class CategoriesScreen extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Color(category.colorValue).withValues(alpha: 0.2),
+                  color: Color(category.colorValue).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(

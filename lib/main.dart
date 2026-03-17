@@ -53,7 +53,7 @@ class LifePlansApp extends StatelessWidget {
         brightness: brightness,
       ),
       scaffoldBackgroundColor: isDark ? const Color(0xFF1F2937) : Colors.white,
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: isDark ? const Color(0xFF374151) : const Color(0xFFF3F4F6),
         elevation: 0,
         shape: RoundedRectangleBorder(

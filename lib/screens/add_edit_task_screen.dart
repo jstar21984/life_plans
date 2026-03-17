@@ -76,7 +76,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.outline.withValues(alpha: 0.3),
+                      color: theme.colorScheme.outline.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -149,7 +149,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
             Text('Category', style: theme.textTheme.titleSmall),
             const SizedBox(height: 8),
             DropdownButtonFormField<String?>(
-              initialValue: _selectedCategoryId,
+              value: _selectedCategoryId,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
