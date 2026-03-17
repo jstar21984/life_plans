@@ -26,7 +26,9 @@ jobs:
         run: |
           mkdir -p appimage/usr/bin
           mkdir -p appimage/usr/lib
-          cp -r build/linux/x64/release/bundle/* appimage/usr/lib/life_plans/
+          mkdir -p appimage/usr/share/icons/hicolor/256x256/apps
+          
+          cp -r build/linux/x64/release/bundle/* appimage/usr/lib/
           cp build/linux/x64/release/bundle/life_plans appimage/usr/bin/
           
           cat > appimage/AppRun << 'EOF'
@@ -58,10 +60,10 @@ jobs:
         run: |
           mkdir -p deb/DEBIAN
           mkdir -p deb/usr/bin
-          mkdir -p deb/usr/lib/life_plans
+          mkdir -p deb/usr/lib
           mkdir -p deb/usr/share/applications
           
-          cp -r build/linux/x64/release/bundle/* deb/usr/lib/life_plans/
+          cp -r build/linux/x64/release/bundle/* deb/usr/lib/
           cp build/linux/x64/release/bundle/life_plans deb/usr/bin/
           
           cat > deb/DEBIAN/control << 'EOF'
