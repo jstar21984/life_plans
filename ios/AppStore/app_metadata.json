@@ -1,0 +1,18 @@
+{
+  "appName": "Life Plans",
+  "appDescription": "A free and open source task scheduler app for managing daily tasks. Features include task management with due dates, recurring tasks, color-coded categories, calendar view, and dark/light theme support. All data is stored locally - no data collection or tracking.",
+  "keywords": "tasks, todo, scheduler, calendar, productivity, organizer, planner, reminders",
+  "releaseNotes": "Initial release with task management, calendar view, categories, recurring tasks, and notifications.",
+  "marketingURL": "",
+  "supportURL": "",
+  "privacyPolicyURL": "",
+  "bundleIdentifier": "com.lifeplans.lifePlans",
+  "sku": "com.lifeplans.lifePlans",
+  "copyright": "Copyright © 2026 Life Plans. All rights reserved.",
+  "primaryCategory": "PRODUCTIVITY",
+  "secondaryCategory": "",
+  "whatsNew": {
+    "en-US": "Initial release with full task management features."
+  },
+  "localizations": ["en-US"]
+}
